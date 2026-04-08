@@ -2,7 +2,7 @@
 #define DISPLAY_H
 
 // Config
-#include "config.h"
+#include "../config.h"
 
 #ifdef WOKWI_MODE
 #define DISPLAY_TYPE    U8G2_SSD1306_128X64_NONAME_2_HW_I2C

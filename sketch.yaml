@@ -1,0 +1,2 @@
+default_fqbn: arduino:avr:nano
+#pro:cpu=8MHzatmega328

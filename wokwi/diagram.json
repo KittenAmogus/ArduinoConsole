@@ -1,0 +1,76 @@
+{
+  "version": 1,
+  "author": "Anonymous maker",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "wokwi-arduino-nano", "id": "nano", "top": 0, "left": 0, "attrs": {} },
+    {
+      "type": "wokwi-pushbutton-6mm",
+      "id": "btn1",
+      "top": 161,
+      "left": -38.4,
+      "attrs": { "color": "yellow", "xray": "1" }
+    },
+    {
+      "type": "wokwi-pushbutton-6mm",
+      "id": "btn2",
+      "top": 199.4,
+      "left": 0,
+      "attrs": { "color": "green", "xray": "1" }
+    },
+    {
+      "type": "wokwi-pushbutton-6mm",
+      "id": "btn3",
+      "top": 161,
+      "left": 38.4,
+      "attrs": { "color": "blue", "xray": "1" }
+    },
+    {
+      "type": "wokwi-pushbutton-6mm",
+      "id": "btn4",
+      "top": 122.6,
+      "left": 0,
+      "attrs": { "color": "red", "xray": "1" }
+    },
+    {
+      "type": "wokwi-pushbutton-6mm",
+      "id": "btn5",
+      "top": 132.2,
+      "left": 144,
+      "attrs": { "color": "grey", "xray": "1" }
+    },
+    {
+      "type": "wokwi-pushbutton-6mm",
+      "id": "btn6",
+      "top": 189.8,
+      "left": 105.6,
+      "attrs": { "color": "white", "xray": "1" }
+    },
+    {
+      "type": "board-ssd1306",
+      "id": "oled1",
+      "top": -112.06,
+      "left": 19.43,
+      "attrs": { "i2cAddress": "0x3c" }
+    }
+  ],
+  "connections": [
+    [ "btn2:1.l", "nano:GND.1", "black", [ "v-48", "h-9.6", "v-76.8", "h154.1" ] ],
+    [ "btn1:1.r", "nano:GND.1", "black", [ "h0.8", "v-86.4", "h154.1" ] ],
+    [ "btn3:1.l", "nano:GND.1", "black", [ "h-38.4", "v-9.6", "h-9.6", "v-76.8", "h153.6" ] ],
+    [ "btn4:1.l", "nano:GND.1", "black", [ "h-9.6", "v-48", "h153.6" ] ],
+    [ "oled1:GND", "nano:GND.2", "black", [ "v-9.6", "h-48", "v105.6", "h115.2" ] ],
+    [ "oled1:VCC", "nano:3.3V", "red", [ "v-19.2", "h-67.05", "v0", "h-9.6", "v192" ] ],
+    [ "oled1:SCL", "nano:A5", "green", [ "v-9.6", "h105.9", "v201.6", "h-86.4" ] ],
+    [ "oled1:SDA", "nano:A4", "green", [ "v-19.2", "h105.67", "v220.8", "h-105.6" ] ],
+    [ "btn5:1.l", "nano:GND.1", "black", [ "h0" ] ],
+    [ "btn6:1.r", "nano:GND.1", "black", [ "v-67.2", "h10.4" ] ],
+    [ "btn4:2.r", "nano:4", "red", [ "h0" ] ],
+    [ "btn2:2.r", "nano:5", "green", [ "h0" ] ],
+    [ "btn3:2.r", "nano:6", "blue", [ "h0" ] ],
+    [ "btn1:2.r", "nano:7", "gold", [ "h39.2", "v-28.4", "h38.4" ] ],
+    [ "btn5:2.l", "nano:2", "gray", [ "h0" ] ],
+    [ "btn6:2.l", "nano:3", "white", [ "h0" ] ]
+  ],
+  "dependencies": {}
+}

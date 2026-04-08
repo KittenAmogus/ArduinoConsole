@@ -12,6 +12,13 @@ int main(void) {
 
   // setup();
   u8g2.begin();
+  
+  // Test
+  u8g2.firstPage();
+  u8g2.setFont(u8g2_font_ncenB10_tr);
+  do {
+    u8g2.drawStr(0, 24, "Hello, World!");
+  } while (u8g2.nextPage());
 
   for (;;) {
     // loop();

@@ -16,8 +16,9 @@ typedef union {
 typedef struct {
 
   uint32_t curTime;
-  uint8_t needRedraw : 1;
-  uint8_t _unused_flags : 7;
+  uint8_t needRedraw  : 1;
+  uint8_t needExit    : 1;
+  uint8_t _unused_flags : 6;
 
 } PACKED GlobalMemory;
 

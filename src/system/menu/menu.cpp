@@ -81,14 +81,16 @@ uint8_t startMenu() {
   memset(&sharedMemory, 0, sizeof (sharedMemory));
 
   globalMemory.needRedraw = 1;
+  globalMemory.needExit = 0;
   sharedMemory.menu.selected = 0;
 
   while (1) {
     globalMemory.curTime = millis();
-    if (globalMemory.curTime - buttons.lastUpdate_ms > 50) {
+    if (globalMemory.curTime - buttons.lastUpdate_ms > BUTTONS_TRESHOLD) {
       updateButtons();
       buttons.lastUpdate_ms = globalMemory.curTime;
 
+      // if app started
       handleInput();
     }
 

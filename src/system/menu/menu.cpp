@@ -1,7 +1,13 @@
+/*
 #include "./menu.h"
 #include "../../utils/pmem.h"
 #include "../../utils/input.h"
 #include "../../utils/display.h"
+*/
+#include "menu.h"
+#include "utils/pmem.h"
+#include "utils/input.h"
+#include "utils/display.h"
 
 uint8_t menuState = 0;
 static int8_t offset = 0;
@@ -35,7 +41,10 @@ static void draw() {
 }
 
 static uint8_t handleInput() {
-  if (buttons.event.DOWN) {
+  if (buttons.event.SEL) {
+    buttons.event.SEL = 0;
+    Serial.println((const __FlashStringHelper*)GET_STR( menuState ));
+  } else if (buttons.event.DOWN) {
     needRedraw = 1;
     buttons.event.DOWN = 0;
     if (++menuState >= MENU_SIZE) menuState = 0;

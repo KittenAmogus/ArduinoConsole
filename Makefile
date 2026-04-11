@@ -9,8 +9,7 @@ MODEL =arduino:avr:pro:cpu=8MHzatmega328
 
 # Compiler
 ACLI = arduino-cli
-CPP_FLAGS = -Isrc -Isrc/utils
-AFLAGS_C = --output-dir build/ --libraries ./libraries --build-property "compiler.cpp.extra_flags=$(CPP_FLAGS)"
+AFLAGS_C = --output-dir build/ --libraries ./libraries --build-property "compiler.cpp.extra_flags='-Isrc'"
 AFLAGS_U =
 
 MAIN = ./ArduinoConsole.ino

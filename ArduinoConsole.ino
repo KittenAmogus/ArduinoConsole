@@ -17,6 +17,8 @@ Buttons buttons = {0};
 int main(void) {
   init();
 
+  Serial.begin( 9600 );
+
   // INPUT_PULLUP for buttons
   DDRD &= ~0xFC;
   PORTD |= 0xFC;

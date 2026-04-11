@@ -1,8 +1,9 @@
-#include "src/types.h"
-#include "src/config.h"
-#include "src/utils/input.h"
-#include "src/utils/display.h"
-#include "src/system/menu/menu.h"
+#include "types.h"
+#include "config.h"
+#include "utils/input.h"
+#include "utils/memory.h"
+#include "utils/display.h"
+#include "system/menu/menu.h"
 
 #ifdef WOKWI_MODE
 DISPLAY_TYPE u8g2(U8G2_R0, /*RES*/ 8);
@@ -13,6 +14,8 @@ DISPLAY_TYPE u8g2(U8G2_R0, /*CS*/ 10, /*DC*/ 9, /*RES*/ 8);
 #define FONT u8g2_font_profont12_tf
 
 Buttons buttons = {0};
+SharedMemory sharedMemory;
+GlobalMemory globalMemory;
 
 int main(void) {
   init();
@@ -26,6 +29,8 @@ int main(void) {
   // Init display
   u8g2.begin();
   u8g2.setFont(FONT);
+
+  memset(&globalMemory, 0, sizeof(globalMemory));
 
   // Update cycle
   for (;;) {

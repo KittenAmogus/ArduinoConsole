@@ -1,16 +1,12 @@
 #include "menu.h"
-#include "utils/pmem.h"
-#include "utils/input.h"
-#include "utils/memory.h"
-#include "utils/display.h"
 
 // Apps
 #include "system/sysinfo/sysinfo.h"
 
 static int8_t offset = 0;
 
-// #define GET_STR(idx) ((const char*)pgm_read_word(&menuStrings[idx]))
-
+// Add new apps here
+// TODO Add SD card & File viewer
 static void startApp() {
   switch (sharedMemory.menu.selected) {
     case (MENU_SYSINFO):
@@ -49,7 +45,7 @@ static uint8_t handleInput() {
   // Select
   if (buttons.event.SEL) {
     buttons.event.SEL = 0;
-    startApp();
+    return 1;
 
   // Next
   } else if (buttons.event.DOWN) {
@@ -83,19 +79,17 @@ uint8_t startMenu() {
   globalMemory.needRedraw = 1;
   globalMemory.needExit = 0;
   sharedMemory.menu.selected = 0;
-
-  while (1) {
-    globalMemory.curTime = millis();
-    if (globalMemory.curTime - buttons.lastUpdate_ms > BUTTONS_TRESHOLD) {
-      updateButtons();
-      buttons.lastUpdate_ms = globalMemory.curTime;
-
-      // if app started
-      handleInput();
+  
+  while (!globalMemory.needExit) {
+    if (updateInput()) {
+      if (handleInput()) break;
     }
 
+    // Draw
     if (globalMemory.needRedraw) draw();
   }
+
+  startApp();
 
   return 0;
 }

@@ -1,8 +1,4 @@
 #include "sysinfo.h"
-#include "utils/pmem.h"
-#include "utils/input.h"
-#include "utils/memory.h"
-#include "utils/display.h"
 
 
 static void draw() {
@@ -19,12 +15,14 @@ static void draw() {
   } while (u8g2.nextPage());
 }
 
-static void handleInput() {
+static uint8_t handleInput() {
   // TODO: Add scrolling
   if (buttons.event.END) {
     buttons.event.END = 0;
     globalMemory.needExit = 1;
+    return 1;
   }
+  return 0;
 }
 
 void startSysinfo() {
@@ -33,20 +31,13 @@ void startSysinfo() {
   globalMemory.needExit = 0;
   u8g2.clearBuffer();
 
-  for (;;) {
-
-    // Input
-    globalMemory.curTime = millis();
-    if (globalMemory.curTime - buttons.lastUpdate_ms > BUTTONS_TRESHOLD) {
-      buttons.lastUpdate_ms = globalMemory.curTime;
-      updateButtons();
-      handleInput();
+  while (!globalMemory.needExit) {
+    if (updateInput()) {
+      if (handleInput()) break;
     }
 
     // Draw
     if (globalMemory.needRedraw) draw();
-
-    if (globalMemory.needExit) break;
   }
 
   return;

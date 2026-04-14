@@ -2,10 +2,9 @@
 #define INPUT_H
 
 #include "types.h"
+#include "config.h"
 
-
-#define BUTTONS_TRESHOLD  50
-
+// Buttons data
 extern Buttons buttons;
 
 void updateButtons();

@@ -1,7 +1,7 @@
 #ifndef MENU_H
 #define MENU_H
 
-#include <Arduino.h>
+#include "app/app.h"
 
 // Menu values
 typedef enum {

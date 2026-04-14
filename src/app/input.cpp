@@ -1,5 +1,4 @@
 #include "input.h"
-#include "config.h"
 
 void updateButtons() {
   // SEL, END, UP, DOWN, RIGHT, LEFT

@@ -1,8 +1,4 @@
-#include "types.h"
-#include "config.h"
-#include "utils/input.h"
-#include "utils/memory.h"
-#include "utils/display.h"
+#include "app/app.h"
 #include "system/menu/menu.h"
 
 #ifdef WOKWI_MODE

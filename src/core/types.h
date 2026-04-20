@@ -11,12 +11,12 @@ typedef struct {
   // Is pressed
   union {
     struct {
-      uint8_t SEL:   1;
-      uint8_t END:   1;
-      uint8_t UP:    1;
-      uint8_t DOWN:  1;
-      uint8_t RIGHT: 1;
-      uint8_t LEFT:  1;
+      uint8_t LEFT:   1;
+      uint8_t RIGHT:  1;
+      uint8_t DOWN:   1;
+      uint8_t UP:     1;
+      uint8_t END:    1;
+      uint8_t SEL:    1;
       uint8_t _unused: 2;
     };
     uint8_t mask;
@@ -25,12 +25,12 @@ typedef struct {
   // Is pressed
   union {
     struct {
-      uint8_t SEL:   1;
-      uint8_t END:   1;
-      uint8_t UP:    1;
-      uint8_t DOWN:  1;
-      uint8_t RIGHT: 1;
-      uint8_t LEFT:  1;
+      uint8_t LEFT:   1;
+      uint8_t RIGHT:  1;
+      uint8_t DOWN:   1;
+      uint8_t UP:     1;
+      uint8_t END:    1;
+      uint8_t SEL:    1;
       uint8_t _unused: 2;
     };
     uint8_t mask;

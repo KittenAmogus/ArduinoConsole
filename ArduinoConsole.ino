@@ -2,6 +2,10 @@
 #include "api/api.h"
 #include "core/core.h"
 
+// Apps
+#include "core/app_list.h"
+#include "menu/menu.h"
+
 // Display initializing
 #ifdef WOKWI_MODE
 DISPLAY_TYPE display(U8G2_R0, 8);
@@ -9,8 +13,30 @@ DISPLAY_TYPE display(U8G2_R0, 8);
 DISPLAY_TYPE display(U8G2_R0, 10, 9, 8);
 #endif
 
-#define FONT (u8g2_font_u8glib_4_tr)
 
+SystemMemory sysmem;
+uint8_t globalMemory[GLOBAL_RAM_SIZE];
+
+
+uint8_t launchApp(uint8_t appId) {
+  if (appId >= APPS_COUNT) return 0;
+  // sysmem.runningApp = ...
+  return 1;
+}
+
+const __FlashStringHelper* getAppName(uint8_t appId) {
+  if (appId >= APPS_COUNT) return 0;
+
+  // Читаем адрес строки напрямую из таблицы ALL_APPS, которая во Flash
+  // Смещение +2 или использование структуры поможет найти name
+  const char* namePtr = (const char*)pgm_read_word(&(ALL_APPS[appId].name));
+
+  return (const __FlashStringHelper*)namePtr;
+}
+
+uint8_t getEndItem() {
+  return APPS_COUNT;
+}
 
 int main(void) {
   // Timers for U8G2
@@ -26,48 +52,31 @@ int main(void) {
   DDRD &= ~0xFC;
   PORTD |= 0xFC;
 
-  // FPS timers
-  uint32_t cur, lastMs, lastUpdate;
-  uint8_t fps;
+  // App = menu
+  sysmem.runningApp = &menuApp;
+  sysmem.needRedraw = 1;
 
-  Buttons btns;
+  // Start app
+  sysmem.runningApp->onStart();
 
-  // Loop
+  uint32_t cur;
+
   for (;;) {
-	  cur = millis();
-	
-    // Update FPS
-	  if (cur - lastUpdate > 256) {
-	    lastUpdate = cur;
-	    fps = (uint8_t)(1000 / (cur - lastMs));
-	  }
-	
-    // Draw
-	  display.firstPage();
-    uint8_t page = 0; // Redraw only element which IS on page
-	  do {
 
-      // FPS is on top,
-      // we do not need to redraw it every page
-      if (page == 0) {
-			  display.setDrawColor(1);
-			  display.setCursor(128-12, 5);
-			  display.print(fps);
-      }
+    cur = millis();
 
-      // Buttons can be in 2nd page
-      if (page < 2) {
-        // Buttons
-        updateButtons(&btns);
-        for (uint8_t btn=0; btn<6; btn++) {
-          display.setDrawColor(btns.is.mask & (1 << btn));
-          display.drawBox((btn << 4) + (btn << 1) + 2, 2, 16, 16);
-        }
-      }
+    // Update input
+    if (cur - sysmem.buttons.lastUpdate_ms > 50) {
+      updateButtons(&sysmem.buttons);
+      sysmem.buttons.lastUpdate_ms = cur;
+    }
 
-      page++;
-    } while (display.nextPage());
-    lastMs = cur;
+    // Update app
+    sysmem.runningApp->update();
+    if (sysmem.needRedraw) {
+      sysmem.needRedraw = 0;
+      sysmem.runningApp->draw();
+    }
   }
 }
 

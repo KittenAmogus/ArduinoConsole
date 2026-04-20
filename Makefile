@@ -5,11 +5,12 @@ PORT = $(firstword /dev/ttyUSB*)
 BAUDRATE = 9600
 
 # Arduino model
-MODEL =arduino:avr:pro:cpu=8MHzatmega328
+MODEL =arduino:avr:uno
+#pro:cpu=8MHzatmega328
 
 # Compiler
 ACLI = arduino-cli
-AFLAGS_C = --output-dir build/ --libraries ./libraries --build-property "compiler.cpp.extra_flags=-Isrc -Wall"
+AFLAGS_C = --output-dir build/ --libraries ./libraries --build-property "compiler.cpp.extra_flags=-Isrc -Isrc/apps -Wall"
 AFLAGS_U =
 
 MAIN = ./ArduinoConsole.ino
@@ -28,7 +29,7 @@ upload: compile
 
 monitor:
 	@echo "-- Monitoring..."
-	$(ACLI) monitor -p $(PORT) --config baudrate=$(BAUDRATE)
+	$(ACLI) monitor -p $(PORT) --config baudrate=$(BAUDRATE) -b $(MODEL)
 
 clean:
 	@echo "-- Cleaning..."

@@ -1,38 +1,73 @@
-#include "app/app.h"
-#include "system/menu/menu.h"
+// System
+#include "api/api.h"
+#include "core/core.h"
 
+// Display initializing
 #ifdef WOKWI_MODE
-DISPLAY_TYPE u8g2(U8G2_R0, /*RES*/ 8);
+DISPLAY_TYPE display(U8G2_R0, 8);
 #else
-DISPLAY_TYPE u8g2(U8G2_R0, /*CS*/ 10, /*DC*/ 9, /*RES*/ 8);
+DISPLAY_TYPE display(U8G2_R0, 10, 9, 8);
 #endif
 
-#define FONT u8g2_font_profont12_tf
+#define FONT (u8g2_font_u8glib_4_tr)
 
-Buttons buttons = {0};
-SharedMemory sharedMemory;
-GlobalMemory globalMemory;
 
 int main(void) {
+  // Timers for U8G2
   init();
 
-  Serial.begin( 9600 );
+  // Display setup
+  display.begin();
+  display.setBusClock(8000000); // 8 MHz
+  display.setContrast(16);      // 0 - 60
+  display.setFont(FONT);
 
-  // INPUT_PULLUP for buttons
+  // pinMode(2-7) = INPUT_PULLUP
   DDRD &= ~0xFC;
   PORTD |= 0xFC;
 
-  // Init display
-  u8g2.begin();
-  u8g2.setFont(FONT);
+  // FPS timers
+  uint32_t cur, lastMs, lastUpdate;
+  uint8_t fps;
 
-  memset(&globalMemory, 0, sizeof(globalMemory));
+  Buttons btns;
 
-  // Update cycle
+  // Loop
   for (;;) {
-    startMenu();
-  }
+	  cur = millis();
+	
+    // Update FPS
+	  if (cur - lastUpdate > 256) {
+	    lastUpdate = cur;
+	    fps = (uint8_t)(1000 / (cur - lastMs));
+	  }
+	
+    // Draw
+	  display.firstPage();
+    uint8_t page = 0; // Redraw only element which IS on page
+	  do {
 
-  return 0;
+      // FPS is on top,
+      // we do not need to redraw it every page
+      if (page == 0) {
+			  display.setDrawColor(1);
+			  display.setCursor(128-12, 5);
+			  display.print(fps);
+      }
+
+      // Buttons can be in 2nd page
+      if (page < 2) {
+        // Buttons
+        updateButtons(&btns);
+        for (uint8_t btn=0; btn<6; btn++) {
+          display.setDrawColor(btns.is.mask & (1 << btn));
+          display.drawBox((btn << 4) + (btn << 1) + 2, 2, 16, 16);
+        }
+      }
+
+      page++;
+    } while (display.nextPage());
+    lastMs = cur;
+  }
 }
 

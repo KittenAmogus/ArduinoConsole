@@ -2,6 +2,7 @@
 #define MEMORY_H
 
 
+#include "core/app.h"
 #include "core/types.h"
 #include "core/config.h"
 
@@ -10,6 +11,11 @@ typedef struct {
 
   App *runningApp;
   Buttons buttons;
+
+  uint8_t nextAppId;  // For menu
+
+  uint32_t bootTime;
+  uint32_t currentTime;
 
   // Flags
   struct {
@@ -21,7 +27,7 @@ typedef struct {
 } PACKED SystemMemory;
 extern SystemMemory sysmem;
 
-#define GLOBAL_RAM_SIZE 1024
+#define GLOBAL_RAM_SIZE 512
 extern uint8_t globalMemory[GLOBAL_RAM_SIZE];
 
 

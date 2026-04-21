@@ -6,6 +6,7 @@
 #include "core/app_list.h"
 #include "menu/menu.h"
 
+
 // Display initializing
 #ifdef WOKWI_MODE
 DISPLAY_TYPE display(U8G2_R0, 8);
@@ -13,34 +14,16 @@ DISPLAY_TYPE display(U8G2_R0, 8);
 DISPLAY_TYPE display(U8G2_R0, 10, 9, 8);
 #endif
 
-
 SystemMemory sysmem;
 uint8_t globalMemory[GLOBAL_RAM_SIZE];
 
 
-uint8_t launchApp(uint8_t appId) {
-  if (appId >= APPS_COUNT) return 0;
-  // sysmem.runningApp = ...
-  return 1;
-}
-
-const __FlashStringHelper* getAppName(uint8_t appId) {
-  if (appId >= APPS_COUNT) return 0;
-
-  // Читаем адрес строки напрямую из таблицы ALL_APPS, которая во Flash
-  // Смещение +2 или использование структуры поможет найти name
-  const char* namePtr = (const char*)pgm_read_word(&(ALL_APPS[appId].name));
-
-  return (const __FlashStringHelper*)namePtr;
-}
-
-uint8_t getEndItem() {
-  return APPS_COUNT;
-}
-
 int main(void) {
   // Timers for U8G2
   init();
+
+  Serial.begin(9600);
+  Serial.println("Begin");
 
   // Display setup
   display.begin();
@@ -52,23 +35,45 @@ int main(void) {
   DDRD &= ~0xFC;
   PORTD |= 0xFC;
 
+  // Set boot time
+  sysmem.bootTime = millis();
+
   // App = menu
   sysmem.runningApp = &menuApp;
   sysmem.needRedraw = 1;
 
   // Start app
   sysmem.runningApp->onStart();
-
-  uint32_t cur;
+  sysmem.nextAppId = 0xFF;
 
   for (;;) {
 
-    cur = millis();
+    sysmem.currentTime = millis();
 
     // Update input
-    if (cur - sysmem.buttons.lastUpdate_ms > 50) {
+    if (sysmem.currentTime - sysmem.buttons.lastUpdate_ms > 50) {
       updateButtons(&sysmem.buttons);
-      sysmem.buttons.lastUpdate_ms = cur;
+      sysmem.buttons.lastUpdate_ms = sysmem.currentTime;
+    }
+
+    // If app has no exit condition  TODO: ADD system button
+    if (CHECK_EVENT_BTN(LEFT)) {
+      sysmem.needExit = 1;
+    }
+
+    if (sysmem.needExit) {
+      sysmem.needExit = 0;
+      sysmem.runningApp->onExit();
+
+      if (sysmem.nextAppId == 0xFF) {
+        Serial.println("Relaunch menu");
+        launchApp(MENU_ID);
+      } else {
+        Serial.print("Launch ");
+        Serial.println(sysmem.nextAppId);
+        launchApp(sysmem.nextAppId);
+      }
+
     }
 
     // Update app
@@ -76,7 +81,11 @@ int main(void) {
     if (sysmem.needRedraw) {
       sysmem.needRedraw = 0;
       sysmem.runningApp->draw();
+
+      // Reset font
+      display.setFont(FONT);
     }
+
   }
 }
 

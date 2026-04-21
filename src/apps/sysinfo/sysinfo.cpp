@@ -1,0 +1,36 @@
+#include "sysinfo.h"
+
+SysinfoApp sysinfoApp;
+
+#define SYSINFO_SCR_OFFSET  (this->appData->scrollOffset)
+#define SYSINFO_LAST_UPDATE (this->appData->lastUpdate)
+
+void SysinfoApp::onStart() {
+  this->appData = (SysinfoData*)(globalMemory);
+  memset(this->appData, 0, sizeof(SysinfoData));
+  SYSINFO_LAST_UPDATE = millis();
+}
+
+void SysinfoApp::onExit() {
+  
+}
+
+void SysinfoApp::update() {
+  sysmem.needRedraw |= (sysmem.currentTime - SYSINFO_LAST_UPDATE > 512);
+}
+
+void SysinfoApp::draw() {
+  SYSINFO_LAST_UPDATE = millis();
+
+  display.firstPage();
+  do {
+
+    display.setDrawColor(1);
+    // display.setCursor(FONT_WIDTH * 7, FONT_HEIGHT);
+    display.setCursor(2, FONT_HEIGHT + 2);
+    display.print("Uptime ");
+    display.print((sysmem.currentTime - sysmem.bootTime) / 1000);
+
+  } while (display.nextPage());
+}
+

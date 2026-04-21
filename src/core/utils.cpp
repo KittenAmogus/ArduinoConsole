@@ -47,4 +47,12 @@ int getFreeRAM() {
   else                return (&top - __brkval);
 }
 
+uint16_t xorShift16() {
+  static uint16_t y = RANDOM_SEED;
+  y ^= y << 13;
+  y ^= y >> 9;
+  y ^= y << 7;
+  return y;
+}
+
 

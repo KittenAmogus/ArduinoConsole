@@ -10,7 +10,7 @@ MODEL =arduino:avr:uno
 
 # Compiler
 ACLI = arduino-cli
-AFLAGS_C = --output-dir build/ --libraries ./libraries --build-property "compiler.cpp.extra_flags=-Isrc -Isrc/apps -Wall"
+AFLAGS_C = --output-dir build/ --libraries games --build-property "compiler.cpp.extra_flags=-Isrc/games -Isrc -Isrc/apps -Wall"
 AFLAGS_U =
 
 MAIN = ./ArduinoConsole.ino

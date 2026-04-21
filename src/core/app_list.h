@@ -5,11 +5,16 @@
 #include "menu/menu.h"
 #include "sysinfo/sysinfo.h"
 #include "test/test.h"
+
+// Games
+#include "flappy/flappy.h"
 // #include "<name>/<name.h>"
 
 extern MenuApp menuApp;
 extern SysinfoApp sysinfoApp;
 extern TestApp testApp;
+
+extern FlappyApp flappyApp;
 // extern <Name>App <name>App;
 
 struct AppRegistry {
@@ -18,6 +23,8 @@ struct AppRegistry {
 };
 
 const AppRegistry ALL_APPS[] PROGMEM = {
+  {&flappyApp, TITLE_FLAPPY},
+
   {&sysinfoApp, TITLE_SYSINFO},
   {&testApp, TITLE_TEST},
 

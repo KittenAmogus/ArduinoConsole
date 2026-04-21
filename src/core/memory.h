@@ -27,7 +27,7 @@ typedef struct {
 } PACKED SystemMemory;
 extern SystemMemory sysmem;
 
-#define GLOBAL_RAM_SIZE 512
+#define GLOBAL_RAM_SIZE 256 // (768 + 128)
 extern uint8_t globalMemory[GLOBAL_RAM_SIZE];
 
 

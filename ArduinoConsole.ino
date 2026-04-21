@@ -24,7 +24,7 @@ int main(void) {
 
   // Display setup
   display.begin();
-  display.setBusClock(8000000); // 8 MHz
+  display.setBusClock(8000000<<1); // 8 MHz
   display.setContrast(16);      // 0 - 60
   display.setFont(FONT);
 

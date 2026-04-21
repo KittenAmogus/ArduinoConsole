@@ -18,6 +18,8 @@ uint8_t launchApp(uint8_t appId) {
   sysmem.runningApp->onStart();
   sysmem.nextAppId = 0xFF;
 
+  sysmem.buttons.event.mask = 0;  // Reset events
+
   sysmem.needRedraw = 1;
 
   return 1;
@@ -35,5 +37,14 @@ uint8_t getEndItem() {
   return APPS_COUNT - 1;
 }
 
+extern char *__brkval;
+extern char __bss_end;
+
+// System info
+int getFreeRAM() {
+  char top;
+  if (__brkval == 0)  return (&top - &__bss_end);
+  else                return (&top - __brkval);
+}
 
 

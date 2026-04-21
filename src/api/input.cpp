@@ -1,11 +1,19 @@
 #include "input.h"
 
-// Pins are D2 -> D7
 void updateButtons(Buttons *buttons) {
-  // SEL, END, UP, DOWN, RIGHT, LEFT
-  uint8_t mask = (~PIND >> 2) & 0x3F;
+  uint8_t rawD = ~PIND; // Digital
+  uint8_t rawC = ~PINC; // Analog
+ 
+  // D-PAD (Analog)
+  uint8_t mask = (rawC & 0x0F);  // A0-A3
+ 
+  // Special buttons (Digital)
+  mask |= (rawD & (1 << PD2)) << 2; // D2
+  mask |= (rawD & (1 << PD4)) << 1; // D4
+  mask |= (rawD & (1 << PD7)) >> 1; // D7
 
-  buttons->event.mask = (mask & ~buttons->is.mask);
+  // Events
+  buttons->event.mask |= (~buttons->is.mask) & mask;
   buttons->is.mask = mask;
 }
 

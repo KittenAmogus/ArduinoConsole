@@ -21,7 +21,7 @@ void MenuApp::onExit() {
 }
 
 void MenuApp::update() {
-  if (CHECK_EVENT_BTN(UP)) {
+  if (CHECK_EVENT_BTN(UP) || CHECK_EVENT_BTN(LEFT)) {
 
     sysmem.needRedraw = 1;
 
@@ -35,7 +35,7 @@ void MenuApp::update() {
     if (MENU_SEL_OFFSET > MENU_END_ITEM) MENU_SEL_OFFSET = 0;
     if (MENU_SEL_OFFSET < MAX_ITEMS) MENU_SCR_OFFSET = 0;
 
-  } else if (CHECK_EVENT_BTN(DOWN)) {
+  } else if (CHECK_EVENT_BTN(DOWN) || CHECK_EVENT_BTN(RIGHT)) {
 
     sysmem.needRedraw = 1;
 
@@ -48,7 +48,7 @@ void MenuApp::update() {
 
   }
 
-  if (CHECK_EVENT_BTN(RIGHT)) {
+  if (CHECK_EVENT_BTN(SEL)) {
     sysmem.needExit = 1;
   }
 }

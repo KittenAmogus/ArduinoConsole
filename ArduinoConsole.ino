@@ -22,18 +22,21 @@ int main(void) {
   // Timers for U8G2
   init();
 
-  Serial.begin(9600);
-  Serial.println("Begin");
-
   // Display setup
   display.begin();
   display.setBusClock(8000000); // 8 MHz
   display.setContrast(16);      // 0 - 60
   display.setFont(FONT);
 
-  // pinMode(2-7) = INPUT_PULLUP
-  DDRD &= ~0xFC;
-  PORTD |= 0xFC;
+  // -- PINMODE --
+  // Direction buttons on ANALOG
+  DDRC &= ~0x0F;  // INPUT
+  PORTC |= 0x0F;  // PULLUP
+ 
+  // SEL, END, SYS on DIGITAL
+  // 2, 4, 7 - INPUT PULLUP
+  DDRD &= ~((1 << PD2) | (1 << PD4) | (1 << PD7));
+  PORTD |= (1 << PD2) | (1 << PD4) | (1 << PD7);
 
   // Set boot time
   sysmem.bootTime = millis();
@@ -56,21 +59,22 @@ int main(void) {
       sysmem.buttons.lastUpdate_ms = sysmem.currentTime;
     }
 
-    // If app has no exit condition  TODO: ADD system button
-    if (CHECK_EVENT_BTN(LEFT)) {
-      sysmem.needExit = 1;
-    }
+    // If app has no exit condition
+    if (CHECK_EVENT_BTN(SYS)) {
+      sysmem.runningApp->onExit();
+      sysmem.nextAppId = 0xFF;
+      sysmem.needExit = 0;
 
-    if (sysmem.needExit) {
+      launchApp(MENU_ID);
+    }
+    // Else if exit pressed
+    else if (sysmem.needExit) {
       sysmem.needExit = 0;
       sysmem.runningApp->onExit();
 
       if (sysmem.nextAppId == 0xFF) {
-        Serial.println("Relaunch menu");
         launchApp(MENU_ID);
       } else {
-        Serial.print("Launch ");
-        Serial.println(sysmem.nextAppId);
         launchApp(sysmem.nextAppId);
       }
 

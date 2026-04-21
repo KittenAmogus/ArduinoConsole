@@ -13,5 +13,8 @@ const __FlashStringHelper* getAppName(uint8_t appId);
 #define CHECK_EVENT(event) (event ? (event = 0, 1) : 0)
 #define CHECK_EVENT_BTN(btn) (CHECK_EVENT(sysmem.buttons.event.btn))
 
+// For system info
+int getFreeRAM();
+
 #endif // UTILS_H
 

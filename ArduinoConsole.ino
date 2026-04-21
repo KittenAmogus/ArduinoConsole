@@ -22,6 +22,8 @@ int main(void) {
   // Timers for U8G2
   init();
 
+  Serial.begin(9600);
+
   // Display setup
   display.begin();
   display.setBusClock(8000000<<1); // 8 MHz

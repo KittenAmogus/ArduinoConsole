@@ -1,8 +1,7 @@
 # Get first available Arduino port
 PORT = $(firstword /dev/ttyUSB*)
 
-# Serial baudrate
-BAUDRATE = 9600
+# Serial baudrate BAUDRATE = 9600
 
 # Arduino model
 MODEL =arduino:avr:uno
@@ -23,7 +22,7 @@ compile:
 	@echo "-- Compiling..."
 	$(ACLI) compile $(AFLAGS_C) -b $(MODEL) $(MAIN)
 
-upload: compile
+upload:
 	@echo "-- Flashing..."
 	$(ACLI) upload $(AFLAGS_U) -p $(PORT) -b $(MODEL)
 

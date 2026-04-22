@@ -4,6 +4,7 @@
 // Apps
 #include "menu/menu.h"
 #include "sysinfo/sysinfo.h"
+#include "screensaver/screensaver.h"
 #include "test/test.h"
 
 // Games
@@ -14,6 +15,7 @@
 extern MenuApp menuApp;
 extern SysinfoApp sysinfoApp;
 extern TestApp testApp;
+extern ScreensaverApp screensaverApp;
 
 extern FlappyApp flappyApp;
 extern SnakeApp snakeApp;
@@ -30,6 +32,7 @@ const AppRegistry ALL_APPS[] PROGMEM = {
 
   {&sysinfoApp, TITLE_SYSINFO},
   {&testApp, TITLE_TEST},
+	{&screensaverApp, TITLE_SCREENSAVER},
 
   {&menuApp, TITLE_MENU},
   // {&<name>App, TITLE_<NAME>},

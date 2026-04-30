@@ -10,6 +10,7 @@
 // Games
 #include "flappy/flappy.h"
 #include "snake/snake.h"
+#include "tetris/tetris.h"
 // #include "<name>/<name.h>"
 
 extern MenuApp menuApp;
@@ -19,6 +20,7 @@ extern ScreensaverApp screensaverApp;
 
 extern FlappyApp flappyApp;
 extern SnakeApp snakeApp;
+extern TetrisApp tetrisApp;
 // extern <Name>App <name>App;
 
 struct AppRegistry {
@@ -29,13 +31,14 @@ struct AppRegistry {
 const AppRegistry ALL_APPS[] PROGMEM = {
   {&flappyApp, TITLE_FLAPPY},
   {&snakeApp, TITLE_SNAKE},
+	{&tetrisApp, TITLE_TETRIS},
+  // {&<name>App, TITLE_<NAME>},
 
   {&sysinfoApp, TITLE_SYSINFO},
   {&testApp, TITLE_TEST},
 	{&screensaverApp, TITLE_SCREENSAVER},
 
   {&menuApp, TITLE_MENU},
-  // {&<name>App, TITLE_<NAME>},
 };
 #define APPS_COUNT (sizeof(ALL_APPS) / sizeof(AppRegistry))
 
